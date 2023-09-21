@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Library</title>
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/normalize.css">
     <script src="scripts/main.js" defer></script>
 </head>
 <body>
@@ -13,12 +12,12 @@
         <div id="header-container">
             <div id="header">
                 <div id="logo">library</div>
-                <button>Log in</button>
             </div>
         </div>
         <div id="content">
             <dialog id="add-book-dialog">
                 <form>
+                    <div id="form-first-text">Add new book</div>
                     <input id="title" type="text" placeholder="Title" required maxlength="100">
                     <input id="author" type="text" placeholder="Author" required maxlength="100">
                     <input id="pages" type="number" placeholder="Pages" required max="10000">
@@ -26,10 +25,11 @@
                         <label for="is-read">Have you read it?</label>
                         <input id="is-read" type="checkbox">
                     </div>
-                    <button id="close-dialog">Confirm</button>
+                    <button id="cancel-dialog">Cancel</button>
+                    <button id="close-dialog">Submit</button>
                 </form>
             </dialog>
-            <button id="show-dialog">Add book</button>
+            <button id="show-dialog">+ Add book</button>
 
             <div id="card-container"></div>
         </div>
