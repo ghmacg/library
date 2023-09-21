@@ -1,3 +1,27 @@
+@import 'normalize.css';
+
+@font-face {
+    font-family: Poppins;
+    src: url(../assets/fonts/Poppins/Poppins-Regular.ttf);
+}
+
+:root {
+    --gray: #ededed;
+    --white: #fefefe;
+    --text-color: #333;
+    --shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    --light-red: #ff9c9c;
+    --light-green: #9fff9c;
+}
+
+body {
+    background-color: var(--gray);
+    font-family: Poppins, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    color: var(--text-color);
+    font-size: 1.2rem;
+    word-wrap: break-word;
+}
+
 #container {
     display: flex;
     flex-direction: column;
@@ -5,6 +29,8 @@
 }
 
 #header-container {
+    background-color: var(--white);
+    box-shadow: var(--shadow);
     width: 100%;
     
     display: flex;
@@ -15,9 +41,11 @@
     width: 60vw;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
+}
 
-    display: flex;
-    justify-content: space-between;
+#logo {
+    font-size: 2.2rem;
+    font-weight: 700;
 }
 
 #content {
@@ -30,6 +58,17 @@
    gap: 2.5rem;
 }
 
+#show-dialog {
+    height: 50px;
+    border: none;
+    background-color: var(--gray);
+    border-radius: 0.3rem;
+    padding-left: 25px;
+    padding-right: 25px;
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
 #card-container {
     width: 100%;
 
@@ -40,15 +79,76 @@
 }
 
 .card {
+    background-color: var(--white);
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow);
     padding: 1.5rem;
-    border: 1px solid black;
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.2rem;
 }
 
 .card > button {
+    height: 50px;
     width: 100%;
+    border: none;
+    border-radius: 0.3rem;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:hover {
+    filter: brightness(90%);
+  }
+
+dialog {
+    border: none;
+    width: 250px;
+    text-align: center;
+    border-radius: 0.5rem;
+    background-color: var(--gray);
+}
+
+::backdrop,
+dialog + .backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+#form-first-text {
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+form > input {
+    height: 50px;
+    border: none;
+    border-radius: 0.3rem;
+}
+
+form > input[placeholder] {
+    padding-left: 15px;
+}
+
+form > button {
+    border: none;
+    height: 50px;
+    border-radius: 0.3rem;
+}
+
+#cancel-dialog {
+    background-color: var(--light-red);
+}
+
+#close-dialog {
+    background-color: var(--light-green);
 }
