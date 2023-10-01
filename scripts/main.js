@@ -9,7 +9,7 @@ class Book {
         this.title = title;
         this.author = author;
         this.pages = pages;
-        this.isRead = isRead ? 'Read' : 'Not Read';
+        this.isRead = isRead;
     };
 };
 
@@ -28,119 +28,127 @@ class Library {
     };
 };
 
-// User Interface
-const cardContainer = document.getElementById('card-container');
-const dialog = document.getElementById("add-book-dialog");
-const showDialogBtn = document.getElementById("show-dialog");
-const cancelDialogBtn = dialog.querySelector('#cancel-dialog');
-const closeDialogBtn = dialog.querySelector("#close-dialog");
+const screenController = (() => {
+    const library = new Library;
 
-// Delete all child cards of card container
-const resetDisplayBooks = () => cardContainer.innerHTML = '';
-
-// Display books that are in library
-function updateDisplayBooks() {
-    resetDisplayBooks();
-
-    for (let book in library.books) {
-        createBookCard(library.books[book], book);
-    };
-};
-
-// Returns book info inputted in the dialog when adding a book
-function getInputBookInfo() {
-    const title = document.getElementById('title').value;
-    const author = document.getElementById('author').value;
-    const pages = document.getElementById('pages').value;
-    const isRead = document.getElementById('is-read').checked;
-    return new Book(title, author, pages, isRead);
-};
-
-// Function to create new book with the info inputted by the user,
-//first it calls getInputBookInfo and then add that info into the library 
-function createBook() {
-    const newBook = getInputBookInfo();
-
-    library.addBook(newBook);
-    updateDisplayBooks();
-};
-
-// Function to create all elements for the book card and append card to card container
-function createBookCard(book, index) {
-    const card = document.createElement('div');
-    const title = document.createElement('div');
-    const author = document.createElement('div');
-    const pages = document.createElement('div');
-    const isReadBtn = document.createElement('button');
-    const removeBtn = document.createElement('button');
-
-    card.classList.add('card');
-    card.dataset.indexNumber = index;
-    title.classList.add('book-title');
-    removeBtn.classList.add('remove-button');
+    const cardContainer = document.getElementById('card-container');
+    const dialog = document.getElementById("add-book-dialog");
+    const showDialogBtn = document.getElementById("show-dialog");
+    const cancelDialogBtn = dialog.querySelector('#cancel-dialog');
+    const closeDialogBtn = dialog.querySelector("#close-dialog");
     
-    title.innerHTML = book.title != '' ? `"${book.title}"` : 'Unknown';
-    author.innerHTML = book.author != '' ? book.author : 'Unknown';
-    pages.innerHTML = book.pages != '' ? `${book.pages} pages` : '0';
-    isReadBtn.innerHTML = book.isRead;
-    removeBtn.innerHTML = 'Remove';    
+    // Display books that are in library
+    function updateBooks() {
+        cardContainer.innerHTML = '';
     
-    card.appendChild(title);
-    card.appendChild(author);
-    card.appendChild(pages);
-    card.appendChild(isReadBtn);
-    card.appendChild(removeBtn);
-    cardContainer.appendChild(card);
-    
-    // Change background color of button depending if it says Read or Not Read
-    book.isRead === 'Read' ? 
-        isReadBtn.style.backgroundColor = '#9fff9c' : 
-        isReadBtn.style.backgroundColor = '#ff9c9c';
-
-    addRemoveBookFunc(removeBtn, card);
-    addIsReadFunc(isReadBtn, index);
-};
-
-// Add functionality to the remove button on each book card
-function addRemoveBookFunc(button, book) {
-    button.addEventListener('click', () => {
-        library.removeBook(book);
-        updateDisplayBooks();
-    });
-};
-
-// Add functionality to isRead button on each book card
-function addIsReadFunc(button, index) {
-    button.addEventListener('click', () => {
-        if (library.books[index].isRead === 'Read') {
-            library.books[index].isRead = 'Not Read';
-        } else {
-            library.books[index].isRead = 'Read';
+        for (let i in library.books) {
+            createBookCard(library.books[i], i);
         };
+    };
+    
+    function resetInputValues() {
+        const title = document.getElementById('title').value = '';
+        const author = document.getElementById('author').value = '';
+        const pages = document.getElementById('pages').value = '';
+        const isRead = document.getElementById('is-read').checked = false;
+    };
 
-        updateDisplayBooks();
-    });
-};
+    // Returns book info inputted in the dialog when adding a book
+    function getInputValues() {
+        const title = document.getElementById('title').value;
+        if (title === '') title = 'Unknown';
 
-// Function to control when the dialog opens and closes
-function controlDialog() {
-    showDialogBtn.addEventListener("click", () => dialog.showModal());
-      
-    cancelDialogBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        dialog.close();
-    });
+        const author = document.getElementById('author').value;
+        if (author === '') author = 'Unknown';
 
-    closeDialogBtn.addEventListener("click", (e) => {
-        createBook();
+        const pages = document.getElementById('pages').value;
+        if (pages === '') pages = '0';
 
-        e.preventDefault();
-        dialog.close();
-    });
-}
+        const isRead = document.getElementById('is-read').checked;
 
-// Function calling
-const library = new Library;
+        return new Book(title, author, pages, isRead);
+    };
+    
+    // Function to create new book with the info inputted by the user,
+    //first it calls getInputBookInfo and then add that info into the library 
+    function createBook() {
+        const newBook = getInputValues();
+        resetInputValues();
+    
+        library.addBook(newBook);
+        updateBooks();
+    };
+    
+    // Function to create all elements for the book card and append card to card container
+    function createBookCard(book, index) {
+        const card = document.createElement('div');
+        const title = document.createElement('div');
+        const author = document.createElement('div');
+        const pages = document.createElement('div');
+        const isReadBtn = document.createElement('button');
+        const removeBtn = document.createElement('button');
+    
+        card.classList.add('card');
+        card.dataset.indexNumber = index;
+        title.classList.add('book-title');
+        removeBtn.classList.add('remove-button');
+        
+        title.innerHTML = book.title;
+        author.innerHTML = book.author;
+        pages.innerHTML = book.pages;
+        isReadBtn.innerHTML = book.isRead ? 'Read' : 'Not Read';
+        removeBtn.innerHTML = 'Remove';    
+        
+        card.appendChild(title);
+        card.appendChild(author);
+        card.appendChild(pages);
+        card.appendChild(isReadBtn);
+        card.appendChild(removeBtn);
+        cardContainer.appendChild(card);
+        
+        // Change background color of button depending if it says Read or Not Read
+        book.isRead ? 
+            isReadBtn.style.backgroundColor = '#9fff9c' : 
+            isReadBtn.style.backgroundColor = '#ff9c9c';
+    
+        addRemoveBookFunc(removeBtn, card);
+        addIsReadFunc(isReadBtn, index);
+    };
+    
+    // Add functionality to the remove button on each book card
+    function addRemoveBookFunc(button, book) {
+        button.addEventListener('click', () => {
+            library.removeBook(book);
+            updateBooks();
+        });
+    };
+    
+    // Add functionality to isRead button on each book card
+    function addIsReadFunc(button, index) {
+        button.addEventListener('click', () => {
+            library.books[index].isRead = library.books[index].isRead ? false : true;
 
-updateDisplayBooks();
-controlDialog();
+            updateBooks();
+        });
+    };
+    
+    // Function to control when the dialog opens and closes
+    function controlDialog() {
+        showDialogBtn.addEventListener("click", () => dialog.showModal());
+          
+        cancelDialogBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            dialog.close();
+        });
+    
+        closeDialogBtn.addEventListener("click", (e) => {
+            createBook();
+    
+            e.preventDefault();
+            dialog.close();
+        });
+    };
+    
+    updateBooks();
+    controlDialog();
+})();
