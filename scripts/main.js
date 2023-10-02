@@ -142,5 +142,4 @@ const screenController = (() => {
 
     
     updateBooks();
-    controlDialog();
 })();
