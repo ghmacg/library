@@ -149,6 +149,6 @@ form > button {
     background-color: var(--light-red);
 }
 
-#close-dialog {
+#submit-dialog {
     background-color: var(--light-green);
 }

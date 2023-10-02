@@ -22,8 +22,7 @@ class Library {
         this.books.push(book);
     };
 
-    removeBook(book) {
-        const index = Number(book.dataset.indexNumber);
+    removeBook(index) {
         this.books.splice(index, 1);
     };
 };
@@ -35,10 +34,10 @@ const screenController = (() => {
     const dialog = document.getElementById("add-book-dialog");
     const showDialogBtn = document.getElementById("show-dialog");
     const cancelDialogBtn = dialog.querySelector('#cancel-dialog');
-    const closeDialogBtn = dialog.querySelector("#close-dialog");
+    const SubmitDialogBtn = dialog.querySelector("#submit-dialog");
     
     // Display books that are in library
-    function updateBooks() {
+    const updateBooks = () => {
         cardContainer.innerHTML = '';
     
         for (let i in library.books) {
@@ -46,7 +45,7 @@ const screenController = (() => {
         };
     };
     
-    function resetInputValues() {
+    const resetInputValues = () => {
         const title = document.getElementById('title').value = '';
         const author = document.getElementById('author').value = '';
         const pages = document.getElementById('pages').value = '';
@@ -54,33 +53,30 @@ const screenController = (() => {
     };
 
     // Returns book info inputted in the dialog when adding a book
-    function getInputValues() {
+    const getInputValues = () => {
         const title = document.getElementById('title').value;
-        if (title === '') title = 'Unknown';
-
         const author = document.getElementById('author').value;
-        if (author === '') author = 'Unknown';
-
         const pages = document.getElementById('pages').value;
-        if (pages === '') pages = '0';
-
         const isRead = document.getElementById('is-read').checked;
+
+        if (title === '') title = 'Unknown';
+        if (author === '') author = 'Unknown';
+        if (pages === '') pages = '0';
 
         return new Book(title, author, pages, isRead);
     };
     
     // Function to create new book with the info inputted by the user,
     //first it calls getInputBookInfo and then add that info into the library 
-    function createBook() {
+    const createBook = () => {
         const newBook = getInputValues();
-        resetInputValues();
-    
         library.addBook(newBook);
+        resetInputValues();
         updateBooks();
     };
     
     // Function to create all elements for the book card and append card to card container
-    function createBookCard(book, index) {
+    const createBookCard = (book, index) => {
         const card = document.createElement('div');
         const title = document.createElement('div');
         const author = document.createElement('div');
@@ -111,43 +107,39 @@ const screenController = (() => {
             isReadBtn.style.backgroundColor = '#9fff9c' : 
             isReadBtn.style.backgroundColor = '#ff9c9c';
     
-        addRemoveBookFunc(removeBtn, card);
+        addRemoveBookFunc(removeBtn, index);
         addIsReadFunc(isReadBtn, index);
     };
     
     // Add functionality to the remove button on each book card
-    function addRemoveBookFunc(button, book) {
+    const addRemoveBookFunc = (button, index) => {
         button.addEventListener('click', () => {
-            library.removeBook(book);
+            library.removeBook(index);
             updateBooks();
         });
     };
     
     // Add functionality to isRead button on each book card
-    function addIsReadFunc(button, index) {
+    const addIsReadFunc = (button, index) => {
         button.addEventListener('click', () => {
             library.books[index].isRead = library.books[index].isRead ? false : true;
-
             updateBooks();
         });
     };
     
-    // Function to control when the dialog opens and closes
-    function controlDialog() {
-        showDialogBtn.addEventListener("click", () => dialog.showModal());
-          
-        cancelDialogBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            dialog.close();
-        });
-    
-        closeDialogBtn.addEventListener("click", (e) => {
-            createBook();
-    
-            e.preventDefault();
-            dialog.close();
-        });
-    };
+    showDialogBtn.addEventListener("click", () => dialog.showModal());
+      
+    cancelDialogBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        dialog.close();
+    });
+
+    SubmitDialogBtn.addEventListener("click", (e) => {
+        createBook();
+        e.preventDefault();
+        dialog.close();
+    });
+
     
     updateBooks();
     controlDialog();
